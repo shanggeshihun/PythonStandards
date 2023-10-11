@@ -1,0 +1,119 @@
+/*2.1Hadoop是什么*/
+1)Hadoop是一个由Apache基金会所开发的分布式系统基础架构。
+2)主要解决,海量数据的存储和海量数据的分析计算问题。
+3)广义上来说,Hadoop通常是指一个更广泛的概念一 Hadoop生态圈。
+
+/*2.2Hadoop发展历史*/
+1)Lucene框架是DougCutting开创的开源软件,用Java书写代码,实现与Google类似的全文搜索功能，它提供了全文检索引擎的架构,包括完整的查询引擎和索引引擎。
+2)2001年年底Lucene成为Apache基金会的一个子项目。
+3)对于海量数据的场景,Lucene面对与Google同样的困难,存储数据困难,检索速度慢。
+4)学习和模仿Google解决这些问题的办法: 微型版Nutch。
+5)可以说Google是Hadoop的思想之源(Google在大数据方面的三篇论文)
+GFS--->HDFS
+Map-Reduce -->MR
+BigTable --->HBase
+6)2003-2004年, Google公开了部分GFS和MapReduce思想的细节,以此为基础Doug Cutting等人用了2年业余时间实现了DFS和MapReduce机制,使Nutch性能飙升。
+7)2005年Hadoop作为Lucene的子项目Nutch的一部分正式引入Apache基金会。
+8)2006年3月份, Map-Reduce和Nutch Distributed File System(NDFS)分别被纳入称为Hadoop的项目中。
+
+
+/*2.3 Hadoop三大发行版本*/
+Hadoop三大发行版本: Apache、 Cloudera(CDH)、 Hortonworks。
+Apache版本最原始(最基础)的版本，对于入门学习最好
+Cloudera在大型互联网企业中用的较多。。
+Hortonworks文档较好。
+
+1. Apache Hadoop.
+官网地址: http://hadoop.apache.org/releases.html
+下载地址: https://archive apache.org/dist/hadoop/common/
+
+
+/*2.4 Hadoop的优势(4高)*/
+1 )高可靠性: Hadoop底层维护多个数据副本(默认3个副本),所以即使Hadoop某个计算元素
+或存储出现故障,也不会导致数据的丢失。
+2 )高圹展性:在集群间分配任务数据，可方便的扩展数以千计的节点。
+3 )高效性:在MapReduce的思想下, Hadoop是并行工作的,以加快任务处理
+速度。
+4 )高容错性:能够自动将失败的任务重新分配。
+
+/*2.5 Hadoop组成(面试重点)*/
+Hadoop解决两个问题：存储和计算
+
+Hadoop1.x组成:
+MapReduce(计算+资源调度)
+HDFS (数据存储)
+Common (辅助工具)
+
+Hadoop2.x组成:
+MapReduce (计算)
+Yarn (资源调度)
+HDFS (数据存储)
+Common (辅助工具)
+
+耦合是指两个或两个以上的体系或两种运动形式间通过相互作用而彼此影响以至联合起来的现象。 解耦就是用数学方法将两种运动分离开来处理问题，常用解耦方法就是忽略或简化对所研究问题影响较小的一种运动，只分析主要的运动。
+
+在Hadoopl.x时代Hadoop中的MapReduce同时处理业务逻辑运算和资源的调度，耦合性较大,在Hadoop2.x时代,增加了Yarn。Yarn只负责资源的调度1MapReduce只负责运算。
+
+
+/**2.5.1 HDFS架构概述*/
+1 ) NameNode(nn) :存储文件的元数据 ，如文件名，文件目录结构 ,文件属性 (生成时间、 副本数、文件权限) ,以及每个文件的块列表和块所在的DataNode等。
+2 ) DataNode(dn) :在本地文件系统存储文件块数据,以及块数据的校验和。
+3 ) Secondary NameNode(nm)用来监控HDFS状态的辅助后台程序,每隔一段时间获取HDFS元数据的快照。
+
+/**2.5.2 Yarn架构概述*/
+节点=服务器=电脑
+1 ) ResourceManager ( RM )主要作用如下
+(1 )处理客户端请求
+(2 )监控NodeManager
+(3 )启动或监控ApplicationMaster=任务or job
+(4 )资源的分配与调度
+
+2 ) NodeManager ( NM )主要作用如下
+(1 )管理单个节点上的资源
+(2 )处理来自ResourceManager的命令
+(3 )处理来自AplicationMaster的命令
+
+3 ) ApplicationMaster ( AM )作用如下-负责集群上某一个任务的资源申请调度
+(1 )负责数据的切分
+(2 )为应用程序申请资源并分配给内部的任务
+(3)任务的监控与容错
+
+4 ) Container
+Container是YARN中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等。
+
+
+
+/**2.5.3 MapReduce架构概述*/
+MapRednree将计算过程分为两个阶段: Map和Reduce,如图2-25所示。
+1) Map阶段开行处理输人数据
+2) Reduce 阶段对Map结果进行汇总。
+
+
+/*2.6 大数据技术生态体系*/
+1)数据来源层
+数据库(结构化数据)
+文件日志(半结构化数据)
+视频、ppt等 (非结构化数据)
+2)数据传输层
+数据库(结构化数据)》》Sqoop数据传递
+文件日志(半结构化数据)》》Flume日志收集
+视频、ppt等 (非结构化数据)
+3)数据存储层
+HDFS文件存储、Kafka消息队列、HBase非关系型数据库
+4)资源管理层 
+YARN资源管理 
+5)数据计算层
+a MapReduce离线计算(Hadoop核心计算)》》hive数据查询、Mahout数据挖掘
+b Spark Core内存计算(固态硬盘，容易造成数据丢失)》》Spark Mib数据挖掘、Spark R数据分析、Spark Sql数据查询(类似hive查询)、Spark Streaming准实时计算(主流，批处理)
+c Storm实时计算
+6)任务调度器 
+Oozie任务调度 
+AzKaban任务调度
+
+综合：zookeeper数据平台配置和调度
+
+7)业务模型层 
+业务模型、数据可视化、业务应用
+
+
+/*2.7 推荐系统框架图*/
